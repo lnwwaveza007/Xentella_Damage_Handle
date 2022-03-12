@@ -1,0 +1,12 @@
+name: Xentella_Damage_Handle
+version: '${project.version}'
+main: lnwwaveza008.xentella_damage_handle.Xentella_Damage_Handle
+api-version: 1.16
+authors: [ lnwwaveza008, DJKlaKunG ]
+description: This plugin made for Xentella Server
+depend: [MMOCore, MythicMobs, MythicLib, MMOItems]
+commands:
+  XentellaDamageHandle:
+    description: Use command about Xentella Damage Handle
+    usage: /<command>
+    aliases: xdh

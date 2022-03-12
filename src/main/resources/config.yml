@@ -1,0 +1,153 @@
+
+#██╗░░██╗██████╗░██╗░░██╗
+#╚██╗██╔╝██╔══██╗██║░░██║
+#░╚███╔╝░██║░░██║███████║
+#░██╔██╗░██║░░██║██╔══██║
+#██╔╝╚██╗██████╔╝██║░░██║
+#╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝
+
+# Set Variable for monster damage
+MonsterFormula:
+  Variable:
+    #Use x for level
+    DEFIgnore: "(x * 0)+1"
+    DEFReduct: "(x * 0)+1"
+
+    #Use x for level
+    #Use y for Def of monster
+    DMGReduction: "((x + y) * 0) + 1"
+
+    #Use x for Level
+    Defense: "x*7+150*(x/10)"
+
+    #Use x for level
+    EM: "x * 0"
+
+# Set Variable for Level Diff
+LevelDiff:
+  #Attacker's level is higher or lower than victim
+  #x > attacker's level
+  #y > victim's level
+  MultipyLevelHigher: "(x - y) * 0.5"
+  MultipyLevelLower: "(y - x) * 0.5"
+
+  #x > damage
+  #y > mutipy
+  #z > defends
+  LevelHigher: "(x + y)"
+  LevelLower: "(x - y)"
+
+# Set formular
+Formular:
+  #MutiDef Formular
+  #use x for attacker's level
+  #use y for victim's level
+  #use z for def ignore
+  #use a for def reduce
+  MutiDef: "(x + 100)/((1-z)*(1-a)*(y+100)+x+80)"
+
+  #MutiResistance Formular
+  #use x for Resistance-total
+  #If res < 0.0
+  MutiRes1: "1 - (x/2)"
+  #If res <= 0.75
+  MutiRes2: "1 - x"
+  #If res > 0.0
+  MutiRes3: "1/(4*x+1)"
+
+  #MutiDMGReduction Formular
+  #use x for def
+  #use y for DMGReduction
+  #use z for victimlevel
+  MutiDMGReduction: "x/(x + (1-y) * (z+100))"
+
+  #For Element Bonus
+  #Use x for Elements bonus
+  #Use y for Elements bonus
+  MutiBonus: '1 + x + y'
+
+  #For Def Formular
+  #Use x for Def
+  #Use y for Level
+  DefFormular: "x + y * 7"
+
+HitRate:
+  Max: 93 #Max of hit rate
+  Min: 3 #Min of hit rate
+  MissSound: "ENTITY_PLAYER_ATTACK_NODAMAGE" #Sound when player is miss
+
+Element:
+  Delay: 5 #Delay before the element at target will reset (In seconds)
+  #EMBonus Formular
+  #x for Em
+  #k for Static value 1
+  #c for Static value 2
+  EMBonusFormular: "k * (x/(x+c))"
+
+  #Set k and c for Amplifying Reaction
+  AmplifyingK: 2.78
+  AmplifyingC: 1400
+  #MultAmlifying Formular
+  #Use x for MultReaction
+  #Use y for EMBonus
+  #Use z for ReactionBonus
+  MultAmplifyingFormular: "x * (1 + y + z)"
+
+  AmplifyingReaction:
+    #Use mythicmobs skill name here.
+    Melt: "MELTREACTION"
+    Vaporize: "VAPORIZEREACTION"
+
+  #ElementShieldMessage
+  #Use {x} for Element of the shield
+  #Use {y} for Amount of Shield
+  #Use {z} for Time in seconds
+  ElementShieldRecive: "&aYou got {y} Shield Of {x} For {z} Seconds"
+  #Can't Use time variable for remove msg.
+  ElementShieldRemove: "&cYour {x} Shield is now disappear"
+
+  #Set k and c for Crystallize Reaction
+  CrystallizeK: 4.44
+  CrystallizeC: 1400
+  #CrystallizeShield Formular
+  #Use x for attacker health
+  #Use y for EM bonus
+  #Use z for Shield Bonus
+  CrystallizeShieldFormular: "x * 1*(1+y) * (1+z)"
+
+  CrystallizeReaction:
+    #CC Formular
+    #Use x for CCbase
+    #Use y for Reaction Bonus
+    CCFormular: "x * (1 + (y/100))"
+    #Use mythicmobs skill name here.
+    DustReaction: "DUSTREACTION"
+    FrozenReaction: "FROZENREACTION"
+    MudReaction: "MUDREACTION"
+    BlizzardReaction: "BLIZZARDREACTION"
+
+  #Set k and c for Amplifying Reaction
+  TransformativeK: 16.78
+  TransformativeC: 2000
+
+  #MultLevel Formular
+  #Use x for Level of attacker
+  MultLevel: "16.12 * (x + 16) - 257.23"
+
+  #MUltTransformative Formular
+  #Use x for MultReaction
+  #Use y for MultLevel
+  #Use z for EMbonus
+  #Use a for Reaction Bonus
+  MultTransformative: "x * y * (1 + z + a)"
+
+  TransformativeReaction:
+    #Use mythicmobs skill name here.
+    SuperConduct: "SUPERCONDUCTREACTION"
+    ElectroCharged: "ELECTROCHARGEDREACTION"
+    Shatter: "SHATTERREACTION"
+    Overloaded: "OVERLOADEDREACTION"
+    Poison: "POISONREACTION"
+    Burn: "BURNREACTION"
+    Magma: "MAGMAREACTION"
+    Thorn: "THORNREACTION"
