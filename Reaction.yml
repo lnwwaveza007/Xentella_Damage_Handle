@@ -1,0 +1,139 @@
+MELTREACTION:
+    Skills:
+    - effect:particles{particle=flame;amount=10;speed=0.01;hS=0.25;vS=1;y=1.5} @EntitiesNearOrigin{r=0.1}
+VAPORIZEREACTION:
+    Skills:
+    - effect:particles{particle=cloud;amount=10;speed=0.01;hS=0.25;vS=1;y=1.5} @EntitiesNearOrigin{r=0.1}
+FROZENREACTION:
+    Skills:
+    - potion{type=SLOW;duration=<caster.var.ReactionDuration>;level=255;hasParticles=false} @EntitiesNearOrigin{r=0.1}
+    - potion{type=SLOW_DIGGING;duration=<caster.var.ReactionDuration>;level=255;hasParticles=false} @EntitiesNearOrigin{r=0.1}
+    - Aura{auraName=FROZEN;onTick=FROZENAURA;interval=10;duration=<caster.var.ReactionDuration>} @EntitiesNearOrigin{r=0.1}
+    - sound{s=block.glass.break} @PIR{r=5}
+FROZENAURA:
+    Skills:
+    - effect:particles{particle=block;m=ICE;amount=10;speed=1;hS=0.25;vS=1;y=1.5}
+DUSTREACTION:
+    Skills:
+    - effect:particles{particle=block;m=sand;amount=10;speed=0.75;hS=0.75;vS=1;y=1.5} @EntitiesNearOrigin{r=0.1}
+MUDREACTION-HUMAN:
+    Skills:
+    - xentellabuff{stats=MOVEMENT_SPEED;value=-10;duration=<caster.var.ReactionDuration>;num=RELATIVE;buffid=MUD;removeondeath=true;removeonleave=false} @EntitiesNearOrigin{r=0.1}
+    - xentellabuff{stats=ATTACK_SPEED;value=-10;duration=<caster.var.ReactionDuration>;num=RELATIVE;buffid=MUD;removeondeath=true;removeonleave=false} @EntitiesNearOrigin{r=0.1}
+    - Aura{auraName=MUD;onTick=MUDAURA;interval=10;duration=<caster.var.ReactionDuration>} @EntitiesNearOrigin{r=0.1}
+MUDREACTION-AHUMAN:
+    Skills:
+    - Aura{auraName=MUD;onTick=MUDAURA;onEnd=MUDAURA-ONEND;interval=10;duration=<caster.var.ReactionDuration>} @EntitiesNearOrigin{r=0.1}
+MUDAURA:
+    Skills:
+    - effect:particles{particle=block;m=dirt;amount=10;speed=1;hS=0.25;vS=1;y=1.5}
+BLIZZARDREACTION-HUMAN:
+    Skills:
+    - xentellabuff{stats=Defense;value=-10;duration=<caster.var.ReactionDuration>;num=RELATIVE;buffid=BLIZZARD;removeondeath=true;removeonleave=false} @EntitiesNearOrigin{r=0.1}
+    - Aura{auraName=BLIZZARD;onTick=BLIZZARDAURA;interval=10;duration=<caster.var.ReactionDuration>} @EntitiesNearOrigin{r=0.1}
+BLIZZARDREACTION-AHUMAN:
+    Skills:
+    - Aura{auraName=BLIZZARD;onTick=BLIZZARDAURA;interval=10;duration=<caster.var.ReactionDuration>} @EntitiesNearOrigin{r=0.1}
+BLIZZARDAURA:
+    Skills:
+    - effect:particles{particle=reddust;color=#FFFFF;amount=10;speed=1;hS=0.25;vS=1;y=1.5}
+ELECTROCHARGEDREACTION:
+    Skills:
+    - Aura{auraName=ELECTROCHARGED;onTick=ELECTROCHARGEDAURA;interval=40;duration=400} @EntitiesNearOrigin{r=0.1}
+ELECTROCHARGEDAURA:
+    Skills:
+    - effect:particles{particle=reddust;color=#c603fc;amount=10;speed=1;hS=0.25;vS=1;y=1.5}
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=ELECTRO}
+BURNREACTION:
+    Skills:
+    - Aura{auraName=BURN;onTick=BURNAURA;interval=40;duration=400} @EntitiesNearOrigin{r=0.1}
+BURNAURA:
+    Skills:
+    - effect:particles{particle=flame;amount=10;speed=0.01;hS=0.25;vS=1;y=1.5}
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=PYRO}
+POISONREACTION:
+    Skills:
+    - Aura{auraName=POISON;onTick=POISONAURA;interval=40;duration=400} @EntitiesNearOrigin{r=3}
+    - effect:particlering{particle=reddust;color=#32a852;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+POISONAURA:
+    Skills:
+    - effect:particles{particle=reddust;color=#32a852;amount=10;speed=0.01;hS=0.25;vS=1;y=1.5}
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=DENDRO}
+MAGMAREACTION:
+    Skills:
+    - Aura{auraName=MAGMA;onTick=MAGMAAURA;interval=40;duration=200} @EntitiesNearOrigin{r=0.1}
+MAGMAAURA:
+    Skills:
+    - effect:particles{particle=flame;amount=10;speed=0.01;hS=0.25;vS=1;y=1.5}
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=PYRO}
+OVERLOADEDREACTION:
+    Skills:
+    - effect:particlering{particle=flame;radius=4;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=flame;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=4}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=PYRO} @EntitiesNearOrigin{r=4}
+SHATTERREACTION-HUMAN:
+    Skills:
+    - effect:particles{particle=reddust;color=#FFFFFF;amount=10;speed=0.01;hS=0.25;vS=1;y=1} @Self
+    - xentellabuff{stats=CRITICAL_STRIKE_CHANCE;value=10;duration=200;num=RELATIVE;buffid=SHATTER;removeondeath=true;removeonleave=false} @Self
+    - Aura{auraName=SHATTER;onTick=SHATTERAURA;interval=40;duration=200} @Self
+SHATTERREACTION-AHUMAN:
+    Skills:
+    - effect:particles{particle=reddust;color=#FFFFFF;amount=10;speed=0.01;hS=0.25;vS=1;y=1} @Self
+    - Aura{auraName=SHATTER;onTick=SHATTERAURA;interval=40;duration=200} @Self
+SHATTERAURA:
+    Skills:
+    - effect:particles{particle=reddust;color=#ffffff;amount=10;speed=0.01;hS=0.25;vS=1;y=1.}
+SUPERCONDUCTREACTION-HUMAN:
+    Skills:
+    - effect:particlering{particle=reddust;color=#c603fc;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=reddust;color=#c603fc;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - xentellabuff{stats=PHYSICAL_RES;value=-50;duration=200;num=RELATIVE;buffid=SUPERCONDUCT;removeondeath=true;removeonleave=false} @EntitiesNearOrigin{r=0.1}
+    - Aura{auraName=SUPERCONDUCT;onTick=SUPERCONDUCTAURA;interval=40;duration=200} @EntitiesNearOrigin{r=0.1}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=CRYO} @EntitiesNearOrigin{r=3}
+SUPERCONDUCTREACTION-AHUMAN:
+    Skills:
+    - effect:particlering{particle=reddust;color=#c603fc;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=reddust;color=#c603fc;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - Aura{auraName=SUPERCONDUCT;onTick=SUPERCONDUCTAURA;interval=40;duration=200} @EntitiesNearOrigin{r=0.1}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=CRYO} @EntitiesNearOrigin{r=3}
+SUPERCONDUCTAURA:
+    Skills:
+    - effect:particles{particle=reddust;color=#c603fc;amount=10;speed=0.01;hS=0.25;vS=1;y=1.}
+SWIRLCRYOREACTION:
+    Skills:
+    - effect:particlering{particle=reddust;color=#FFFFFF;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=reddust;color=#FFFFFF;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=CRYO} @EntitiesNearOrigin{r=3}
+SWIRLELECTROREACTION:
+    Skills:
+    - effect:particlering{particle=reddust;color=#c603fc;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=reddust;color=#c603fc;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=ELECTRO} @EntitiesNearOrigin{r=3}
+SWIRLHYDROREACTION:
+    Skills:
+    - effect:particlering{particle=reddust;color=#00bfff;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=reddust;color=#00bfff;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=HYDRO} @EntitiesNearOrigin{r=3}
+SWIRLPYROREACTION:
+    Skills:
+    - effect:particlering{particle=flame;radius=3;points=32;amount=1;hS=0;vS=0;y=0.5} @Origin
+    - effect:particles{particle=flame;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - delay 1
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=PYRO} @EntitiesNearOrigin{r=3}
+THORNREACTION:
+    Skills:
+    - totem{ch=1;i=2;md=60;onEnd=THORNEND;onTick=THORNTICK} @Origin
+THORNTICK:
+    Skills:
+    - effect:particles{particle=reddust;color=#07fc03;amount=10;speed=0.01;hS=0.25;vS=1;y=0} @Origin
+THORNEND:
+    Skills:
+    - effect:particlering{particle=reddust;color=#07fc03;radius=3;points=32;amount=1;hS=0;vS=0;y=0} @Origin
+    - effect:particles{particle=reddust;color=#07fc03;amount=10;speed=0.01;hS=0.25;vS=1;y=1.} @EntitiesNearOrigin{r=3}
+    - XentellaDamage{amount=<caster.var.ReactionDamage>;damagetype=MAGIC;element=DENDRO} @EntitiesNearOrigin{r=3}

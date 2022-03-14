@@ -1,0 +1,157 @@
+MythicMobs Variable: (ต้องพิมตามทุกตารางนิ้ว Case Sensitive)
+	Example:
+	- setvariable{var=caster.ResistancePYRO;value="0.5";type=STRING} # Type ต้องเป็น String
+	Normal And Resistance:
+	- Evasion
+	- HiddenEvasion
+	- Accuracy
+	- HiddenAccuracy
+	- ResistancePhysical
+	- ResistanceMagic
+	- DMGReduction
+	- Resistance[Element]
+		- Element ให้แทนด้วย ชื่อธาตุ **ตัวพิมใหญ่**
+		- เช่น ResistancePYRO
+	Reaction Bonus:
+	- VaporizeBonus
+	- MeltBonus
+	- MudBonus
+	- MagmaBonus
+	- CrystallizeShieldBonus
+	- FrozenBonus
+	- DustBonus
+	- ElectroChargedBonus
+	- BurnBonus
+	- PoisonBonus
+	- OverloadedBonus
+	- SuperConductBonus
+	- SwirlBonus
+	- BlizzardBonus
+	- ThornBonus
+	
+MMOItems Explain:
+	MMOItems Stats Id:
+		#Normal
+		- DEF_IGNORE
+		- DEF_REDUCTION
+		- PHYSICAL_RES
+		- MAGICAL_RES
+		- DMG_REDUCTION
+		- PVE_RES
+		- EVASION
+		- HIDE_EVASION
+		- ACCURACY
+		- HIDE_ACCURACY
+		#Element Bonus
+		- XDH_ALLELEMENT_BONUS
+		- XDH_ANEMO_BONUS
+		- XDH_CYRO_BONUS
+		- XDH_DENDRO_BONUS
+		- XDH_ELECTRO_BONUS
+		- XDH_GEO_BONUS
+		- XDH_HYDRO_BONUS
+		- XDH_PYRO_BONUS
+		#Element Resistance
+		- XDH_ANEMO_RES
+		- XDH_CRYO_RES
+		- XDH_DENDRO_RES
+		- XDH_ELECTRO_RES
+		- XDH_GEO_RES
+		- XDH_HYDRO_RES
+		- XDH_PYRO_RES
+		#Reaction
+		- XDH_EM
+		- XDH_VAPORIZE_BONUS
+		- XDH_MELT_BONUS
+		- XDH_FROZEN_BONUS
+		- XDH_DUST_BONUS
+		- XDH_MUD_BONUS
+		- XDH_BLIZZARD_BONUS
+		- XDH_CRYSTALLIZE_SHIELD_BONUS
+		- XDH_ELECTROCHARGED_BONUS
+		- XDH_BURN_BONUS
+		- XDH_POISON_BONUS
+		- XDH_MAGMA_BONUS
+		- XDH_OVERLOADED_BONUS
+		- XDH_SUPERCONDUCT_BONUS
+		- XDH_SWIRL_BONUS
+		- XDH_THORN_BONUS
+		#Misc
+		- XDH_ITEMCOEF
+		- XDH_ITEMID
+		- XDH_ITEMTYPEGROUP
+		- XDH_TIER
+		- XDH_SUBSTATSTIER
+		- XDH_MAXREALDURABILITY
+		- XDH_RESTOREPERCENTMAXDURABILITY
+		- XDH_RESTOREMAXDURABILITY
+		- XDH_LEVELUPGRADE
+	Lore and Stats:
+		- ถ้าไม่ต้องการให้ stats ใหนโชว์ในไอเท็มให้ลบออกไปจาก stats.yml หรือ lore-format.yml ได้เลยไม่มี Error
+		- ชื่อใน lore-format.yml ใช้ชื่อเดียวกับ stats.yml ได้เลยเหมือนกัน
+		
+Placeholders Explain:
+	- สามารถอ่านค่าทุก Stats ใน MMOItems ได้ด้วย placeholder
+	- xdh_mmoitems_[ชื่อ Stats]
+		- เช่น xdh_mmoitems_DEF_IGNORE
+		
+MMOitems Lore: #ก็อปไปวางต่อจากเดิมใน MMOItems/language/Stats.yml ได้เลยครับ
+	#Xentella Damage Handle
+	xdh-def-ignore: '&f■ &6# &fDefense Ignore'
+	xdh-def-reduction: '&f■ &6# &fDefense Reduction'
+	xdh-damage-reduction: '&f■ &6# &fDamage Reduction'
+	xdh-accuracy: '&f■ &6# &fAccuracy'
+	xdh-hide-accuracy: '&f■ &6# &fHidden Accuracy'
+	xdh-evasion: '&f■ &6# &fEvasion'
+	xdh-hide-evasion: '&f■ &6# &fHidden Evasion'
+
+	#Element Resistance
+	xdh-pve-res: '&f■ &6# &fPVE Resistance'
+	xdh-physical-res: '&f■ &6# &fPhysical Resistance'
+	xdh-magical-res: '&f■ &6# &fMagical Resistance'
+	xdh-anemo-res: '&f■ &6# &fAnemo Resistance'
+	xdh-cryo-res: '&f■ &6# &fCryo Resistance'
+	xdh-dendro-res: '&f■ &6# &fDendro Resistance'
+	xdh-electro-res: '&f■ &6# &fElectro Resistance'
+	xdh-geo-res: '&f■ &6# &fGeo Resistance'
+	xdh-hydro-res: '&f■ &6# &fHydro Resistance'
+	xdh-pyro-res: '&f■ &6# &fPyro Resistance'
+
+	#Element Bonus
+	xdh-allelement-bonus: '&f■ &6# &fAll Elements Bonus Damage'
+	xdh-anemo-bonus: '&f■ &6# &fAnemo Bonus Damage'
+	xdh-cryo-bonus: '&f■ &6# &fCryo Bonus Damage'
+	xdh-dendro-bonus: '&f■ &6# &fDendro Bonus Damage'
+	xdh-electro-bonus: '&f■ &6# &fElectro Bonus Damage'
+	xdh-geo-bonus: '&f■ &6# &fGeo Bonus Damage'
+	xdh-hydro-bonus: '&f■ &6# &fHydro Bonus Damage'
+	xdh-pyro-bonus: '&f■ &6# &fPyro Bonus Damage'
+
+	#Reaction Bonus
+	xdh-elementalmastery: '&f■ &6# &fElement Mastery'
+	xdh-blizzard-bonus: '&f■ &6# &fBlizzard Duration Bonus'
+	xdh-burn-bonus: '&f■ &6# &fBurn Damage Bonus'
+	xdh-crystallizeshield-bonus: '&f■ &6# &fCrystallize Shield Bonus'
+	xdh-dust-bonus: '&f■ &6# &fDust Duration Bonus'
+	xdh-electrocharged-bonus: '&f■ &6# &fElectro Charged Damage Bonus'
+	xdh-frozen-bonus: '&f■ &6# &fFrozen Duration Bonus'
+	xdh-magma-bonus: '&f■ &6# &fMagma Damage Bonus'
+	xdh-melt-bonus: '&f■ &6# &fMelt Damage Bonus'
+	xdh-mud-bonus: '&f■ &6# &fMud Duration Bonus'
+	xdh-overloaded-bonus: '&f■ &6# &fOverloaded Damage Bonus'
+	xdh-poison-bonus: '&f■ &6# &fPoison Damage Bonus'
+	xdh-superconduct-bonus: '&f■ &6# &fSuperconduct Damage Bonus'
+	xdh-swirl-bonus: '&f■ &6# &fSwirl Damage Bonus'
+	xdh-vaporize-bonus: '&f■ &6# &fVaporize Damage Bonus'
+	xdh-thorn-bonus: '&f■ &6# &fThorn Damage Bonus'
+
+	#Misc
+	xdh-itemcoef: '&f■ &6# &fItem Coef'
+	xdh-itemid: '&f■ &6# &fItem Id'
+	xdh-itemtier: '&f■ &6# &fItem Tier'
+	xdh-itemtypegroup: '&f■ &6# &fItem Type Group'
+	xdh-levelupgrade: '&f■ &6# &fLevel Upgrade'
+	xdh-maxrealdurability: '&f■ &6# &fMax Real Durability'
+	xdh-restoremaxdurability: '&f■ &6# &fRestore Max Durability'
+	xdh-restoremaxpercentdurability: '&f■ &6# &fRestore Percent Max Durability'
+	xdh-substatstier: '&f■ &6# &fSubstats Tier'
