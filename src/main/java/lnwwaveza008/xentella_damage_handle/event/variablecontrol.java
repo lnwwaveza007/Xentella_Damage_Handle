@@ -23,6 +23,11 @@ public class variablecontrol {
     }
 
     public void AddElementToTarget(Entity entity,String element){
+        //Set Glow to Entity
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(element.toUpperCase()+"SHIELD");
+        team.addEntry(entity.getUniqueId().toString());
+        entity.setGlowing(true);
+        //
         entity.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_elementvictim"), PersistentDataType.STRING, element);
         configload cfload = new configload();
         new BukkitRunnable() {
@@ -31,6 +36,10 @@ public class variablecontrol {
                 if (entity != null) {
                     if (entity.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_elementvictim"), PersistentDataType.STRING)) {
                         entity.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_elementvictim"));
+                        if (team.hasEntry(entity.getUniqueId().toString())) {
+                            team.removeEntry(entity.getUniqueId().toString());
+                        }
+                        entity.setGlowing(false);
                     }
                 }
             }

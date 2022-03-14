@@ -94,6 +94,11 @@ public class ReactionCalculate {
                     }else if (Type.contains("CRYO")){
                         material =  Material.WHITE_CONCRETE;
                         element = "CRYO";
+                        if (victim instanceof Player) {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getShatterReaction() + "-HUMAN", victim.getLocation());
+                        }else {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getShatterReaction() + "-AHUMAN", victim.getLocation());
+                        }
                     }else if (Type.contains("PYRO")){
                         material =  Material.RED_CONCRETE;
                         element = "PYRO";
@@ -115,7 +120,7 @@ public class ReactionCalculate {
                     Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
                     // Shield Calcutate
                     Double ShieldA = cfload.getCrystallizeShieldFormular().setVariable("x",player.getHealth()).setVariable("y",EMbonus).setVariable("z", ShieldBonus).evaluate();
-                    if (Type.contains("PYRO")) {
+                    if (Type.contains("PYRO") || Type.contains("CRYO"))  {
                         vc.DropShield(victim, material, element, ShieldA, 10);
                     }else{
                         vc.DropShield(victim, material, element, ShieldA, 30);
@@ -137,28 +142,6 @@ public class ReactionCalculate {
                         Vector direction = victim.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
                         direction.multiply(CCTotal/2);
                         victim.setVelocity(direction);
-                    }
-                    if (Type.contains("BLIZZARD")){
-                        Double BlizzardBonus = PlayerData.get(player).getStats().getMap().getStat("XDH_BLIZZARD_BONUS");
-                        Integer CCTotal = (int) ((cfload.getCCFormular().setVariable("x",10).setVariable("y",BlizzardBonus).evaluate()) * 20);
-                        getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putInt("ReactionDuration", CCTotal);
-                        if (victim instanceof Player) {
-                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-HUMAN", victim.getLocation());
-                        }else {
-                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-AHUMAN", victim.getLocation());
-                            victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING, "true");
-                            // Countdown
-                            new BukkitRunnable() {
-                                @Override
-                                public void run(){
-                                    if (victim != null) {
-                                        if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING)){
-                                            victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_blizzard"));
-                                        }
-                                    }
-                                }
-                            }.runTaskLater(pl, CCTotal);
-                        }
                     }
                 }
             }
@@ -207,6 +190,87 @@ public class ReactionCalculate {
                     Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",4).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
                     getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
                     MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getOverloadedReaction(), victim.getLocation());
+                }
+                if (Type.contains("THORN")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double EM = PlayerData.get(player).getStats().getMap().getStat("XDH_EM");
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",Double.valueOf(PlayerData.get(player).getLevel())).evaluate();
+                    Double ReactionBonus = PlayerData.get(player).getStats().getMap().getStat("XDH_THORN_BONUS");
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.7).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getThornReaction(), victim.getLocation());
+                }
+                if (Type.contains("SUPERCONDUCT")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double EM = PlayerData.get(player).getStats().getMap().getStat("XDH_EM");
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",Double.valueOf(PlayerData.get(player).getLevel())).evaluate();
+                    Double ReactionBonus = PlayerData.get(player).getStats().getMap().getStat("XDH_SUPERCONDUCT_BONUS");
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.5).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    if (entity instanceof Player) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSuperConductReaction()+"-HUMAN", victim.getLocation());
+                    }else{
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSuperConductReaction()+"-AHUMAN", victim.getLocation());
+                        victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING, "true");
+                        // Countdown
+                        new BukkitRunnable() {
+                            @Override
+                            public void run(){
+                                if (victim != null) {
+                                    if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING)){
+                                        victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_superconduct"));
+                                    }
+                                }
+                            }
+                        }.runTaskLater(pl, 80);
+                    }
+                }
+                // Swirl
+                if (Type.contains("CRYO") || Type.contains("ELECTRO") || Type.contains("HYDRO") || Type.contains("PYRO")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double EM = PlayerData.get(player).getStats().getMap().getStat("XDH_EM");
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",Double.valueOf(PlayerData.get(player).getLevel())).evaluate();
+                    Double ReactionBonus = PlayerData.get(player).getStats().getMap().getStat("XDH_SWIRL_BONUS");
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.6).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    if (Type.contains("CRYO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlCryoReaction(), victim.getLocation());
+                        Double BlizzardBonus = PlayerData.get(player).getStats().getMap().getStat("XDH_BLIZZARD_BONUS");
+                        Integer CCTotal = (int) ((cfload.getCCFormular().setVariable("x",10).setVariable("y",BlizzardBonus).evaluate()) * 20);
+                        getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putInt("ReactionDuration", CCTotal);
+                        if (victim instanceof Player) {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-HUMAN", victim.getLocation());
+                        }else {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-AHUMAN", victim.getLocation());
+                            victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING, "true");
+                            // Countdown
+                            new BukkitRunnable() {
+                                @Override
+                                public void run(){
+                                    if (victim != null) {
+                                        if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING)){
+                                            victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_blizzard"));
+                                        }
+                                    }
+                                }
+                            }.runTaskLater(pl, CCTotal);
+                        }
+                    }
+                    if (Type.contains("ELECTRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlElectroReaction(), victim.getLocation());
+                    }
+                    if (Type.contains("HYDRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlHydroReaction(), victim.getLocation());
+                    }
+                    if (Type.contains("PYRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlPyroReaction(), victim.getLocation());
+                    }
                 }
             }
             //================= Another Reaction =================
@@ -290,6 +354,11 @@ public class ReactionCalculate {
                     }else if (Type.contains("CRYO")){
                         material =  Material.WHITE_CONCRETE;
                         element = "CRYO";
+                        if (victim instanceof Player) {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getShatterReaction() + "-HUMAN", victim.getLocation());
+                        }else {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getShatterReaction() + "-AHUMAN", victim.getLocation());
+                        }
                     }else if (Type.contains("PYRO")){
                         material =  Material.RED_CONCRETE;
                         element = "PYRO";
@@ -329,7 +398,7 @@ public class ReactionCalculate {
                     Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
                     // Shield Calcutate
                     Double ShieldA = cfload.getCrystallizeShieldFormular().setVariable("x",((LivingEntity) entity).getHealth()).setVariable("y",EMbonus).setVariable("z", ShieldBonus).evaluate();
-                    if (Type.contains("PYRO")) {
+                    if (Type.contains("PYRO") || Type.contains("CRYO"))  {
                         vc.DropShield(victim, material, element, ShieldA, 10);
                     }else{
                         vc.DropShield(victim, material, element, ShieldA, 30);
@@ -363,34 +432,6 @@ public class ReactionCalculate {
                         Vector direction = victim.getLocation().toVector().subtract(entity.getLocation().toVector()).normalize();
                         direction.multiply(CCTotal/2);
                         victim.setVelocity(direction);
-                    }
-                    if (Type.contains("BLIZZARD")){
-                        Double BlizzardBonus = 0.0;
-                        if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
-                            if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("BlizzardBonus") != null) {
-                                BlizzardBonus = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("BlizzardBonus").get().toString());
-                            }
-                        }
-                        Integer CCTotal = (int) ((cfload.getCCFormular().setVariable("x",10).setVariable("y",BlizzardBonus).evaluate()) * 20);
-                        VariableRegistry variables = getVariableManager().getRegistry(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity));
-                        variables.putInt("ReactionDuration", CCTotal);
-                        if (victim instanceof Player) {
-                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-HUMAN", victim.getLocation());
-                        }else {
-                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-AHUMAN", victim.getLocation());
-                            victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING, "true");
-                            // Countdown
-                            new BukkitRunnable() {
-                                @Override
-                                public void run(){
-                                    if (victim != null) {
-                                        if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING)){
-                                            victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_blizzard"));
-                                        }
-                                    }
-                                }
-                            }.runTaskLater(pl, CCTotal);
-                        }
                     }
                 }
             }
@@ -476,6 +517,121 @@ public class ReactionCalculate {
                     getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
                     MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getMagmaReaction(), victim.getLocation());
                 }
+                if (Type.contains("SUPERCONDUCT")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double victimlevel = 1.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getLevel();
+                    }
+                    Double EM = cfload.getEmEXP().setVariable("x",victimlevel).evaluate();
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",victimlevel).evaluate();
+                    Double ReactionBonus = 0.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("SuperConductBonus") != null) {
+                            ReactionBonus = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("SuperConductBonus").get().toString());
+                        }
+                    }
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.5).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    if (entity instanceof Player) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSuperConductReaction()+"-HUMAN", victim.getLocation());
+                    }else{
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSuperConductReaction()+"-AHUMAN", victim.getLocation());
+                        victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING, "true");
+                        // Countdown
+                        new BukkitRunnable() {
+                            @Override
+                            public void run(){
+                                if (victim != null) {
+                                    if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING)){
+                                        victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_superconduct"));
+                                    }
+                                }
+                            }
+                        }.runTaskLater(pl, 80);
+                    }
+                }
+                // Thorn
+                if (Type.contains("THORN")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double victimlevel = 1.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getLevel();
+                    }
+                    Double EM = cfload.getEmEXP().setVariable("x",victimlevel).evaluate();
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",victimlevel).evaluate();
+                    Double ReactionBonus = 0.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("ThornBonus") != null) {
+                            ReactionBonus = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("ThornBonus").get().toString());
+                        }
+                    }
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.7).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getThornReaction(), victim.getLocation());
+                }
+                // Swirl
+                if (Type.contains("CRYO") || Type.contains("ELECTRO") || Type.contains("HYDRO") || Type.contains("PYRO")){
+                    Double K = cfload.getTransformativeK();
+                    Double C = cfload.getTransformativeC();
+                    Double victimlevel = 1.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getLevel();
+                    }
+                    Double EM = cfload.getEmEXP().setVariable("x",victimlevel).evaluate();
+                    Double EMbonus = cfload.getEMBonusFormular().setVariable("x",EM).setVariable("k",K).setVariable("c",C).evaluate();
+                    Double MultLevel = cfload.getMultLevel().setVariable("x",victimlevel).evaluate();
+                    Double ReactionBonus = 0.0;
+                    if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("SwirlBonus") != null) {
+                            ReactionBonus = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("SwirlBonus").get().toString());
+                        }
+                    }
+                    Float MultTransformative = (float) cfload.getMultTransformative().setVariable("x",0.6).setVariable("y",MultLevel).setVariable("z",EMbonus).setVariable("a",ReactionBonus).evaluate();
+                    getVariableManager().getRegistry(VariableScope.TARGET, BukkitAdapter.adapt(entity)).putFloat("ReactionDamage", MultTransformative);
+                    if (Type.contains("CRYO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlCryoReaction(), victim.getLocation());
+                        Double BlizzardBonus = 0.0;
+                        if (MythicMobs.inst().getAPIHelper().isMythicMob(entity)) {
+                            if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("BlizzardBonus") != null) {
+                                BlizzardBonus = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getVariables().get("BlizzardBonus").get().toString());
+                            }
+                        }
+                        Integer CCTotal = (int) ((cfload.getCCFormular().setVariable("x",10).setVariable("y",BlizzardBonus).evaluate()) * 20);
+                        VariableRegistry variables = getVariableManager().getRegistry(MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity));
+                        variables.putInt("ReactionDuration", CCTotal);
+                        if (victim instanceof Player) {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-HUMAN", victim.getLocation());
+                        }else {
+                            MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getBlizzardReaction()+"-AHUMAN", victim.getLocation());
+                            victim.getPersistentDataContainer().set(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING, "true");
+                            // Countdown
+                            new BukkitRunnable() {
+                                @Override
+                                public void run(){
+                                    if (victim != null) {
+                                        if (victim.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_blizzard"), PersistentDataType.STRING)){
+                                            victim.getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_blizzard"));
+                                        }
+                                    }
+                                }
+                            }.runTaskLater(pl, CCTotal);
+                        }
+                    }
+                    if (Type.contains("ELECTRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlElectroReaction(), victim.getLocation());
+                    }
+                    if (Type.contains("HYDRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlHydroReaction(), victim.getLocation());
+                    }
+                    if (Type.contains("PYRO")) {
+                        MythicMobs.inst().getAPIHelper().castSkill(entity, cfload.getSwirlPyroReaction(), victim.getLocation());
+                    }
+                }
             }
         }
         return 1.0;
@@ -513,10 +669,6 @@ public class ReactionCalculate {
         if (mixelement.contains("CRYO") && mixelement.contains("HYDRO")) {
             return "CRYSTALLIZE=FROZEN";
         }
-        // Blizzard
-        if (mixelement.contains("CRYO") && mixelement.contains("ANEMO")) {
-            return "CRYSTALLIZE=BLIZZARD";
-        }
         //================= Transformative Reaction =================
         // Superconduct
         if (mixelement.contains("CRYO") && mixelement.contains("ELECTRO")) {
@@ -553,6 +705,19 @@ public class ReactionCalculate {
         // THORN
         if (mixelement.contains("GEO") && mixelement.contains("DENDRO")) {
             return "TRANSFORMATIVE=THORN";
+        }
+        // Swirl
+        if (mixelement.contains("ANEMO") && mixelement.contains("CRYO")) {
+            return "TRANSFORMATIVE=CRYO";
+        }
+        if (mixelement.contains("ANEMO") && mixelement.contains("ELECTRO")) {
+            return "TRANSFORMATIVE=ELECTRO";
+        }
+        if (mixelement.contains("ANEMO") && mixelement.contains("HYDRO")) {
+            return "TRANSFORMATIVE=HYDRO";
+        }
+        if (mixelement.contains("ANEMO") && mixelement.contains("PYRO")) {
+            return "TRANSFORMATIVE=PYRO";
         }
         return null;
     }

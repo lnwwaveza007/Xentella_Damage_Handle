@@ -1,4 +1,4 @@
-package lnwwaveza008.xentella_damage_handle.api.Element;
+package lnwwaveza008.xentella_damage_handle.api.ElementRes;
 
 import net.Indyuce.mmoitems.api.item.build.ItemStackBuilder;
 import net.Indyuce.mmoitems.stat.data.DoubleData;
@@ -9,9 +9,9 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 
-public class GenoBonus extends DoubleStat {
+public class GeoRes extends DoubleStat {
 
-    public GenoBonus(String id, Material mat, String name, String[] lore) {
+    public GeoRes(String id, Material mat, String name, String[] lore) {
         super(id, mat, name, lore);
     }
 
@@ -19,9 +19,9 @@ public class GenoBonus extends DoubleStat {
     public void whenApplied(@NotNull ItemStackBuilder item, @NotNull StatData data){
         double value = ((DoubleData) data).getValue();
 
-        String format = ItemStat.translate("xdh-geno-bonus");
+        String format = ItemStat.translate("xdh-geo-res");
 
-        item.getLore().insert("xdh-geno-bonus", format.replace("#",""+value));
+        item.getLore().insert("xdh-geo-res", format.replace("#",""+value));
 
         // Add tags
         item.addItemTag(getAppliedNBT(data));

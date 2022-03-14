@@ -151,3 +151,8 @@ Element:
     Burn: "BURNREACTION"
     Magma: "MAGMAREACTION"
     Thorn: "THORNREACTION"
+    #Swirl
+    SwirlCryo: "SWIRLCRYOREACTION"
+    SwirlElectro: "SWIRLELECTROREACTION"
+    SwirlHydro: "SWIRLHYDROREACTION"
+    SwirlPyro: "SWIRLPYROREACTION"

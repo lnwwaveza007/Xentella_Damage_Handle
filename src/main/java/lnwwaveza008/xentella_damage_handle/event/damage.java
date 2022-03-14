@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.units.qual.N;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class damage implements Listener {
@@ -340,7 +341,7 @@ public class damage implements Listener {
                         }
                         // ============ Deal Damage ===================
                         e.getAttack().getDamage().multiplicativeModifier(0);
-                        pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
+                        //pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
                         e.getAttack().getDamage().add(finaldmg, e.getDamage().collectTypes().toArray(new DamageType[0]));
                         variablecontrol variablecontrol = new variablecontrol();
                         variablecontrol.AddElementToTarget(e.getEntity(),element);
@@ -406,7 +407,7 @@ public class damage implements Listener {
                             finaldmg = finaldmg * MultReaction;
                             // ============ Deal Damage ===================
                             e.getAttack().getDamage().multiplicativeModifier(0);
-                            pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
+                            //pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
                             e.getAttack().getDamage().add(finaldmg, e.getDamage().collectTypes().toArray(new DamageType[0]));
                             e.getPlayer().getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_element"));
                         }
@@ -473,8 +474,8 @@ public class damage implements Listener {
                             e.getPlayer().getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_element"));
                         }
                         if (reactiontype.contains("TRANSFORMATIVE")){
-                            Double MultReaction = reactionCalculate.DamageCal(e.getPlayer(), reactiontype, e.getEntity());
                             e.setCancelled(true);
+                            Double MultReaction = reactionCalculate.DamageCal(e.getPlayer(), reactiontype, e.getEntity());
                         }
                     }
                     //Double DamageTotal = reactionCalculate.CheckReaction((Entity) e.getPlayer(), e.getEntity().getPersistentDataContainer().get(new NamespacedKey(pl, "xdh_elementvictim"), PersistentDataType.STRING), e.getPlayer().getPersistentDataContainer().get(new NamespacedKey(pl, "xdh_element"), PersistentDataType.STRING));
@@ -508,6 +509,9 @@ public class damage implements Listener {
                     if (e.getAttack().getDamage().collectTypes().contains(DamageType.PHYSICAL)) {
                         if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical") != null) {
                             Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical").get().toString());
+                            if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING)){
+                                Restotal = Restotal * 0.5;
+                            }
                         }
                     } else if (e.getAttack().getDamage().collectTypes().contains(DamageType.MAGIC)) {
                         if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistanceMagic") != null) {
@@ -749,7 +753,7 @@ public class damage implements Listener {
                         }
                         // ============ Deal Damage ===================
                         e.getAttack().getDamage().multiplicativeModifier(0);
-                        pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
+                        //pl.getServer().getConsoleSender().sendMessage(String.valueOf(finaldmg));
                         e.getAttack().getDamage().add(finaldmg, e.getDamage().collectTypes().toArray(new DamageType[0]));
                         variablecontrol variablecontrol = new variablecontrol();
                         variablecontrol.AddElementToTarget(e.getEntity(),element);
@@ -919,8 +923,8 @@ public class damage implements Listener {
                             e.getPlayer().getPersistentDataContainer().remove(new NamespacedKey(pl, "xdh_element"));
                         }
                         if (reactiontype.contains("TRANSFORMATIVE")){
-                            Double MultReaction = reactionCalculate.DamageCal(e.getPlayer(), reactiontype, e.getEntity());
                             e.setCancelled(true);
+                            Double MultReaction = reactionCalculate.DamageCal(e.getPlayer(), reactiontype, e.getEntity());
                         }
                     }
                 }
@@ -1046,6 +1050,10 @@ public class damage implements Listener {
                         MutiDMGReduction = 1.0;
                     }
                     // ================= Level Diff ====================
+                    DecimalFormat format = new DecimalFormat("0.00");
+                    MutiDef = Double.valueOf(format.format(MutiDef));
+                    MutiRes = Double.valueOf(format.format(MutiRes));
+                    MutiDMGReduction = Double.valueOf(format.format(MutiDMGReduction));
                     Double damgetotal = e.getDamage() * MutiDef * MutiRes * MutiDMGReduction;
                     //pl.getServer().getConsoleSender().sendMessage(""+e.getDamage()," * ",""+MutiDef," * ",""+MutiRes+" * "+""+MutiDMGReduction);
                     //pl.getServer().getConsoleSender().sendMessage(""+damgetotal);
@@ -1124,6 +1132,10 @@ public class damage implements Listener {
                             MutiDMGReduction = 1.0;
                         }
                         // ================= Level Diff ====================
+                        DecimalFormat format = new DecimalFormat("0.00");
+                        MutiDef = Double.valueOf(format.format(MutiDef));
+                        MutiRes = Double.valueOf(format.format(MutiRes));
+                        MutiDMGReduction = Double.valueOf(format.format(MutiDMGReduction));
                         Double damgetotal = e.getDamage() * MutiDef * MutiRes * MutiDMGReduction;
                         //pl.getServer().getConsoleSender().sendMessage(""+e.getDamage()," * ",""+MutiDef," * ",""+MutiRes+" * "+""+MutiDMGReduction);
                         //pl.getServer().getConsoleSender().sendMessage(""+damgetotal);
@@ -1210,6 +1222,10 @@ public class damage implements Listener {
                                 MutiDMGReduction = 1.0;
                             }
                             // ================= Level Diff ====================
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            MutiDef = Double.valueOf(format.format(MutiDef));
+                            MutiRes = Double.valueOf(format.format(MutiRes));
+                            MutiDMGReduction = Double.valueOf(format.format(MutiDMGReduction));
                             Double damgetotal = e.getDamage() * MutiDef * MutiRes * MutiDMGReduction;
                             //pl.getServer().getConsoleSender().sendMessage(""+e.getDamage()," * ",""+MutiDef," * ",""+MutiRes+" * "+""+MutiDMGReduction);
                             //pl.getServer().getConsoleSender().sendMessage(""+damgetotal);
@@ -1273,6 +1289,10 @@ public class damage implements Listener {
                                     MutiDMGReduction = 1.0;
                                 }
                                 // ================= Level Diff ====================
+                                DecimalFormat format = new DecimalFormat("0.00");
+                                MutiDef = Double.valueOf(format.format(MutiDef));
+                                MutiRes = Double.valueOf(format.format(MutiRes));
+                                MutiDMGReduction = Double.valueOf(format.format(MutiDMGReduction));
                                 Double damgetotal = e.getDamage() * MutiDef * MutiRes * MutiDMGReduction;
                                 //pl.getServer().getConsoleSender().sendMessage(""+e.getDamage()," * ",""+MutiDef," * ",""+MutiRes+" * "+""+MutiDMGReduction);
                                 //pl.getServer().getConsoleSender().sendMessage(""+damgetotal);
@@ -1337,6 +1357,10 @@ public class damage implements Listener {
                                     MutiDMGReduction = 1.0;
                                 }
                                 // ================= Level Diff ====================
+                                DecimalFormat format = new DecimalFormat("0.00");
+                                MutiDef = Double.valueOf(format.format(MutiDef));
+                                MutiRes = Double.valueOf(format.format(MutiRes));
+                                MutiDMGReduction = Double.valueOf(format.format(MutiDMGReduction));
                                 Double damgetotal = e.getDamage() * MutiDef * MutiRes * MutiDMGReduction;
                                 //pl.getServer().getConsoleSender().sendMessage(""+e.getDamage()," * ",""+MutiDef," * ",""+MutiRes+" * "+""+MutiDMGReduction);
                                 //pl.getServer().getConsoleSender().sendMessage(""+damgetotal);
@@ -1360,8 +1384,8 @@ public class damage implements Listener {
                                 e.setDamage(finaldmg);
                             }
                             if (reactiontype.contains("TRANSFORMATIVE")){
-                                Double MultReaction = reactionCalculate.DamageCal(e.getDamager(), reactiontype, e.getEntity());
                                 e.setCancelled(true);
+                                Double MultReaction = reactionCalculate.DamageCal(e.getDamager(), reactiontype, e.getEntity());
                             }
                         }
                     }
@@ -1405,6 +1429,9 @@ public class damage implements Listener {
         Player player = e.getPlayer();
         if (player.getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_elementshield"), PersistentDataType.STRING)) {
             pl.getTimemanager().RemoveEntityFromTime(player);
+        }
+        if (player.isGlowing()){
+            player.setGlowing(false);
         }
     }
 

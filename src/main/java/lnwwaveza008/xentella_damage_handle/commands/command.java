@@ -26,34 +26,15 @@ public class command implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args[0].equalsIgnoreCase("Reload")){
-            pl.reloadConfig();
-            configload cfload = new configload();
-            cfload.onReload();
-            sender.sendMessage("Reload Complete");
-            //sender.sendMessage(String.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(((Player) sender).getTargetEntity(50)).getLevel()));
-            //sender.sendMessage(MythicMobs.inst().getAPIHelper().getMythicMobInstance(((Player) sender).getTargetEntity(50)).getVariables().get("TEST").get().toString());
-        }else if (args[0].equalsIgnoreCase("Drop")){
-            Entity player = (Entity) sender;
-            Location loc = player.getLocation();
-            ItemStack item = new ItemStack(Material.BLACK_CONCRETE);
-            Entity dropitem = loc.getWorld().dropItem(player.getLocation(), item);
-            dropitem.setGlowing(true);
-            ((Item) dropitem).setPickupDelay(60);
-            //Set Color of Entity
-            Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-            Team team = board.registerNewTeam("HydroShield");
-            team.setColor(ChatColor.AQUA);
-            team.addEntry(dropitem.getUniqueId().toString());
-            //Add Some Variable to Item
-            Long time = (long) 30;
-            dropitem.getPersistentDataContainer().set(new NamespacedKey(pl, "EShield"), PersistentDataType.STRING, "HYDRO");
-            dropitem.getPersistentDataContainer().set(new NamespacedKey(pl, "EShieldA"), PersistentDataType.DOUBLE, 20.0);
-            dropitem.getPersistentDataContainer().set(new NamespacedKey(pl, "EShieldT"), PersistentDataType.LONG, time);
-        }else if (args[0].equalsIgnoreCase("Check")) {
-            Player player = (Player) sender;
-            player.sendMessage(player.getHealth()+"");
-            //player.sendMessage(player.getPersistentDataContainer().get(new NamespacedKey(pl, "xdh_elementshield"), PersistentDataType.STRING)+" = "+player.getPersistentDataContainer().get(new NamespacedKey(pl, "xdh_elementshieldA"), PersistentDataType.DOUBLE));
+        if (args[0].equalsIgnoreCase("Reload")) {
+            if (sender.isOp()) {
+                pl.reloadConfig();
+                configload cfload = new configload();
+                cfload.onReload();
+                sender.sendMessage("Reload Complete");
+                //sender.sendMessage(String.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(((Player) sender).getTargetEntity(50)).getLevel()));
+                //sender.sendMessage(MythicMobs.inst().getAPIHelper().getMythicMobInstance(((Player) sender).getTargetEntity(50)).getVariables().get("TEST").get().toString());
+            }
         }
         return true;
     }

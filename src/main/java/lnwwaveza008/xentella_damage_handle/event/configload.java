@@ -55,6 +55,13 @@ public class configload {
     public static String PoisonReaction;
     public static String MagmaReaction;
     public static String OverloadedReaction;
+    public static String ShatterReaction;
+    public static String SuperConductReaction;
+    public static String SwirlCryoReaction;
+    public static String SwirlElectroReaction;
+    public static String SwirlHydroReaction;
+    public static String SwirlPyroReaction;
+    public static String ThornReaction;
 
     public Expression GetMDEFIgnore(){
         return MDEFIgnore;
@@ -146,6 +153,13 @@ public class configload {
     public String getPoisonReaction(){ return PoisonReaction; }
     public String getMagmaReaction(){ return MagmaReaction; }
     public String getOverloadedReaction(){ return OverloadedReaction; }
+    public String getShatterReaction(){ return ShatterReaction; }
+    public String getSuperConductReaction(){ return SuperConductReaction; }
+    public String getSwirlCryoReaction(){ return SwirlCryoReaction; }
+    public String getSwirlElectroReaction(){ return SwirlElectroReaction; }
+    public String getSwirlHydroReaction(){ return SwirlHydroReaction; }
+    public String getSwirlPyroReaction(){ return SwirlPyroReaction; }
+    public String getThornReaction(){ return ThornReaction; }
 
     public void onReload(){
         MaxHitRate = pl.getConfig().getDouble("HitRate.Max");
@@ -195,5 +209,12 @@ public class configload {
         PoisonReaction = pl.getConfig().getString("Element.TransformativeReaction.Poison");
         MagmaReaction = pl.getConfig().getString("Element.TransformativeReaction.Magma");
         OverloadedReaction = pl.getConfig().getString("Element.TransformativeReaction.Overloaded");
+        ShatterReaction = pl.getConfig().getString("Element.TransformativeReaction.Shatter");
+        SuperConductReaction = pl.getConfig().getString("Element.TransformativeReaction.SuperConduct");
+        SwirlCryoReaction = pl.getConfig().getString("Element.TransformativeReaction.SwirlCryo");
+        SwirlElectroReaction = pl.getConfig().getString("Element.TransformativeReaction.SwirlElectro");
+        SwirlHydroReaction = pl.getConfig().getString("Element.TransformativeReaction.SwirlHydro");
+        SwirlPyroReaction = pl.getConfig().getString("Element.TransformativeReaction.SwirlPyro");
+        ThornReaction = pl.getConfig().getString("Element.TransformativeReaction.Thorn");
     }
 }
