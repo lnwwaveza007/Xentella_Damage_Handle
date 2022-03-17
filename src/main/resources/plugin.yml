@@ -4,7 +4,7 @@ main: lnwwaveza008.xentella_damage_handle.Xentella_Damage_Handle
 api-version: 1.16
 authors: [ lnwwaveza008, DJKlaKunG ]
 description: This plugin made for Xentella Server
-softdepend: [MMOItems, MMOCore, MythicLib ,MythicMobs ]
+softdepend: [MMOItems,MMOCore,MythicLib,MythicMobs]
 commands:
   XentellaDamageHandle:
     description: Use command about Xentella Damage Handle
