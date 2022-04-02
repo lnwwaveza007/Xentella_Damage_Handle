@@ -1,18 +1,9 @@
 package lnwwaveza008.xentella_damage_handle.event;
 
-import io.lumine.mythic.lib.MythicLib;
+import io.lumine.mythic.bukkit.BukkitAPIHelper;
+import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.lib.api.event.PlayerAttackEvent;
-import io.lumine.mythic.lib.api.player.EquipmentSlot;
-import io.lumine.mythic.lib.api.player.MMOPlayerData;
-import io.lumine.mythic.lib.api.stat.StatMap;
-import io.lumine.mythic.lib.damage.AttackMetadata;
-import io.lumine.mythic.lib.damage.DamageMetadata;
 import io.lumine.mythic.lib.damage.DamageType;
-import io.lumine.mythic.lib.listener.AttackEffects;
-import io.lumine.mythic.lib.listener.DamageReduction;
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent;
-import io.lumine.xikage.mythicmobs.skills.SkillMechanic;
 import lnwwaveza008.xentella_damage_handle.Xentella_Damage_Handle;
 import lnwwaveza008.xentella_damage_handle.mechanic.ElementShield;
 import lnwwaveza008.xentella_damage_handle.mechanic.XentellaDamage;
@@ -20,8 +11,6 @@ import net.Indyuce.mmocore.api.player.PlayerData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +20,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.checker.units.qual.N;
 
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -46,6 +34,7 @@ public class damage implements Listener {
         configload cfload = new configload();
         //================ Dodge Calcuate =========================
         // Player -> Player
+        BukkitAPIHelper mythicMobsAPI = new BukkitAPIHelper();
         if (e.getEntity() instanceof Player){
             //Calcuate Accuracy
             Double Accuracy = PlayerData.get(e.getPlayer()).getStats().getMap().getStat("ACCURACY");
@@ -88,14 +77,14 @@ public class damage implements Listener {
             Double Evasion = 0.0;
             Double HiddenEvasion = 0.0;
             Double EvasionLevel = 1.0;
-            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Evasion") != null) {
-                    Evasion = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Evasion").get().toString());
+            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Evasion") != null) {
+                    Evasion = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Evasion").get().toString());
                 }
-                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("HiddenEvasion") != null) {
-                    HiddenEvasion = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("HiddenEvasion").get().toString());
+                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("HiddenEvasion") != null) {
+                    HiddenEvasion = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("HiddenEvasion").get().toString());
                 }
-                EvasionLevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                EvasionLevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
             }
             Double EvasionTotal = Evasion + HiddenEvasion * 0.1102 * (Math.pow(1.12,EvasionLevel/30));
             //Calculate HitRate
@@ -489,8 +478,8 @@ public class damage implements Listener {
                 Player player = e.getPlayer();
                 // Set Level Victim
                 Double victimlevel = 1.0;
-                if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                    victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                    victimlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                 }
                 // Set Level Attacker
                 Double attackerlevel = 1.0;
@@ -505,17 +494,17 @@ public class damage implements Listener {
                 // ================= Get MutiRes ====================
                 Double Restotal = 0.0;
                 // Get Damage Type
-                if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
+                if (mythicMobsAPI.isMythicMob(e.getEntity())) {
                     if (e.getAttack().getDamage().collectTypes().contains(DamageType.PHYSICAL)) {
-                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical") != null) {
-                            Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical").get().toString());
+                        if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical") != null) {
+                            Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("ResistancePhysical").get().toString());
                             if (e.getEntity().getPersistentDataContainer().has(new NamespacedKey(pl, "xdh_superconduct"), PersistentDataType.STRING)){
                                 Restotal = Restotal * 0.5;
                             }
                         }
                     } else if (e.getAttack().getDamage().collectTypes().contains(DamageType.MAGIC)) {
-                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistanceMagic") != null) {
-                            Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("ResistanceMagic").get().toString());
+                        if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("ResistanceMagic") != null) {
+                            Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("ResistanceMagic").get().toString());
                         }
                     }
                 }
@@ -535,9 +524,9 @@ public class damage implements Listener {
                     def = def - (def * 0.10);
                 }
                 Double DMGReduction = 1.0;
-                if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                    if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
-                        DMGReduction = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
+                if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                    if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
+                        DMGReduction = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
                     }
                 }
                 //Double MutiDMGReduction = def/(def + (1-DMGReduction) * (victimlevel+100));
@@ -586,8 +575,8 @@ public class damage implements Listener {
                     Player player = e.getPlayer();
                     // Set Level Victim
                     Double victimlevel = 1.0;
-                    if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                        victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                    if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                        victimlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                     }
                     // Set Level Attacker
                     Double attackerlevel = 1.0;
@@ -607,9 +596,9 @@ public class damage implements Listener {
                     // ================= Get MutiRes ====================
                     Double Restotal = 0.0;
                     // Get Damage Type
-                    if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
-                            Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
+                    if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                        if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
+                            Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
                         }
                     }
                     // Calculate MutiRes
@@ -628,9 +617,9 @@ public class damage implements Listener {
                         def = def - (def * 0.10);
                     }
                     Double DMGReduction = 1.0;
-                    if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                        if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
-                            DMGReduction = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
+                    if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                        if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
+                            DMGReduction = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
                         }
                     }
                     //Double MutiDMGReduction = def/(def + (1-DMGReduction) * (victimlevel+100));
@@ -686,8 +675,8 @@ public class damage implements Listener {
                         Player player = e.getPlayer();
                         // Set Level Victim
                         Double victimlevel = 1.0;
-                        if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                            victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                        if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                            victimlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                         }
                         // Set Level Attacker
                         Double attackerlevel = 1.0;
@@ -707,9 +696,9 @@ public class damage implements Listener {
                         // ================= Get MutiRes ====================
                         Double Restotal = 0.0;
                         // Get Damage Type
-                        if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                            if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
-                                Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
+                        if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                            if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
+                                Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
                             }
                         }
                         // Calculate MutiRes
@@ -728,9 +717,9 @@ public class damage implements Listener {
                             def = def - (def * 0.10);
                         }
                         Double DMGReduction = 1.0;
-                        if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                            if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
-                                DMGReduction = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
+                        if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                            if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
+                                DMGReduction = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
                             }
                         }
                         //Double MutiDMGReduction = def/(def + (1-DMGReduction) * (victimlevel+100));
@@ -764,8 +753,8 @@ public class damage implements Listener {
                             Player player = e.getPlayer();
                             // Set Level Victim
                             Double victimlevel = 1.0;
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                victimlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                             }
                             // Set Level Attacker
                             Double attackerlevel = 1.0;
@@ -786,12 +775,12 @@ public class damage implements Listener {
                             // ================= Get MutiRes ====================
                             Double Restotal = 0.0;
                             // Get Damage Type
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
-                                    Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
+                                    Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
                                 }
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()) != null) {
-                                    Restotal = Restotal + Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()).get().toString());
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()) != null) {
+                                    Restotal = Restotal + Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()).get().toString());
                                 }
                             }
                             // Calculate MutiRes
@@ -810,9 +799,9 @@ public class damage implements Listener {
                                 def = def - (def * 0.10);
                             }
                             Double DMGReduction = 1.0;
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
-                                    DMGReduction = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
+                                    DMGReduction = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
                                 }
                             }
                             //Double MutiDMGReduction = def/(def + (1-DMGReduction) * (victimlevel+100));
@@ -845,8 +834,8 @@ public class damage implements Listener {
                             Player player = e.getPlayer();
                             // Set Level Victim
                             Double victimlevel = 1.0;
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                victimlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                victimlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                             }
                             // Set Level Attacker
                             Double attackerlevel = 1.0;
@@ -867,12 +856,12 @@ public class damage implements Listener {
                             // ================= Get MutiRes ====================
                             Double Restotal = 0.0;
                             // Get Damage Type
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
-                                    Restotal = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()) != null) {
+                                    Restotal = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element.toUpperCase()).get().toString());
                                 }
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()) != null) {
-                                    Restotal = Restotal + Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()).get().toString());
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()) != null) {
+                                    Restotal = Restotal + Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Resistance"+element2.toUpperCase()).get().toString());
                                 }
                             }
                             // Calculate MutiRes
@@ -891,9 +880,9 @@ public class damage implements Listener {
                                 def = def - (def * 0.10);
                             }
                             Double DMGReduction = 1.0;
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
-                                    DMGReduction = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                if (mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction") != null) {
+                                    DMGReduction = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("DMGReduction").get().toString());
                                 }
                             }
                             //Double MutiDMGReduction = def/(def + (1-DMGReduction) * (victimlevel+100));
@@ -945,20 +934,21 @@ public class damage implements Listener {
             }
         }
         configload cfload = new configload();
+        BukkitAPIHelper mythicMobsAPI = new BukkitAPIHelper();
         //========================== Dodge ======================
         if (e.getEntity() instanceof Player){
             //Calcuate Accuracy
             Double Accuracy = 0.0;
             Double HiddenAccuracy = 0.0;
             Double AccuracyLevel = 1.0;
-            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getDamager()).getVariables().get("Accuracy") != null) {
-                    Accuracy = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("Accuracy").get().toString());
+            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                if (mythicMobsAPI.getMythicMobInstance(e.getDamager()).getVariables().get("Accuracy") != null) {
+                    Accuracy = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("Accuracy").get().toString());
                 }
-                if (MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getDamager()).getVariables().get("HiddenAccuracy") != null) {
-                    HiddenAccuracy = Double.valueOf(MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getVariables().get("HiddenAccuracy").get().toString());
+                if (mythicMobsAPI.getMythicMobInstance(e.getDamager()).getVariables().get("HiddenAccuracy") != null) {
+                    HiddenAccuracy = Double.valueOf(mythicMobsAPI.getMythicMobInstance(e.getEntity()).getVariables().get("HiddenAccuracy").get().toString());
                 }
-                AccuracyLevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getDamager()).getLevel();
+                AccuracyLevel = mythicMobsAPI.getMythicMobInstance(e.getDamager()).getLevel();
             }
             Double AccuracyTotal = Accuracy + HiddenAccuracy * 0.1102 * (Math.pow(1.12,AccuracyLevel/30));
             //Calcuate Evasion
@@ -1004,8 +994,8 @@ public class damage implements Listener {
                     Double victimlevel = Double.valueOf(PlayerData.get((Player) e.getEntity()).getLevel());
                     // Set Level Attacker
                     Double attackerlevel = 1.0;
-                    if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                        attackerlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                    if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                        attackerlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                     }
                     // ==================== Get MutiDef ====================
                     Double defignore = cfload.GetMDEFIgnore().setVariable("x", attackerlevel).evaluate();
@@ -1097,8 +1087,8 @@ public class damage implements Listener {
                         Double victimlevel = Double.valueOf(PlayerData.get((Player) e.getEntity()).getLevel());
                         // Set Level Attacker
                         Double attackerlevel = 1.0;
-                        if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                            attackerlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                        if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                            attackerlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                         }
                         // ==================== Get MutiDef ====================
                         Double defignore = cfload.GetMDEFIgnore().setVariable("x", attackerlevel).evaluate();
@@ -1187,8 +1177,8 @@ public class damage implements Listener {
                             Double victimlevel = Double.valueOf(PlayerData.get((Player) e.getEntity()).getLevel());
                             // Set Level Attacker
                             Double attackerlevel = 1.0;
-                            if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                attackerlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                            if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                attackerlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                             }
                             // ==================== Get MutiDef ====================
                             Double defignore = cfload.GetMDEFIgnore().setVariable("x", attackerlevel).evaluate();
@@ -1253,8 +1243,8 @@ public class damage implements Listener {
                                 Double victimlevel = Double.valueOf(PlayerData.get((Player) e.getEntity()).getLevel());
                                 // Set Level Attacker
                                 Double attackerlevel = 1.0;
-                                if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                    attackerlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                                if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                    attackerlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                                 }
                                 // ==================== Get MutiDef ====================
                                 Double defignore = cfload.GetMDEFIgnore().setVariable("x", attackerlevel).evaluate();
@@ -1321,8 +1311,8 @@ public class damage implements Listener {
                                 Double victimlevel = Double.valueOf(PlayerData.get((Player) e.getEntity()).getLevel());
                                 // Set Level Attacker
                                 Double attackerlevel = 1.0;
-                                if (MythicMobs.inst().getAPIHelper().isMythicMob(e.getEntity())) {
-                                    attackerlevel = MythicMobs.inst().getAPIHelper().getMythicMobInstance(e.getEntity()).getLevel();
+                                if (mythicMobsAPI.isMythicMob(e.getEntity())) {
+                                    attackerlevel = mythicMobsAPI.getMythicMobInstance(e.getEntity()).getLevel();
                                 }
                                 // ==================== Get MutiDef ====================
                                 Double defignore = cfload.GetMDEFIgnore().setVariable("x", attackerlevel).evaluate();
@@ -1396,14 +1386,11 @@ public class damage implements Listener {
 
     @EventHandler
     public void onMythicMechanicLoad(MythicMechanicLoadEvent event) {
-        SkillMechanic mechanic = null;
         if(event.getMechanicName().equalsIgnoreCase("XentellaDamage"))	{
-            mechanic = new XentellaDamage(event.getConfig());
-            event.register(mechanic);
+            event.register(new XentellaDamage(event.getConfig()));
         }
         if(event.getMechanicName().equalsIgnoreCase("ElementShield"))	{
-            mechanic = new ElementShield(event.getConfig());
-            event.register(mechanic);
+            event.register(new ElementShield(event.getConfig()));
         }
     }
 

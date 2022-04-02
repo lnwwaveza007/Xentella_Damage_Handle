@@ -2,7 +2,6 @@ package lnwwaveza008.xentella_damage_handle;
 
 import lnwwaveza008.xentella_damage_handle.api.*;
 import lnwwaveza008.xentella_damage_handle.api.Element.*;
-import lnwwaveza008.xentella_damage_handle.api.Element.HydroBonus;
 import lnwwaveza008.xentella_damage_handle.api.ElementRes.*;
 import lnwwaveza008.xentella_damage_handle.api.Misc.*;
 import lnwwaveza008.xentella_damage_handle.api.Reaction.*;
@@ -89,6 +88,7 @@ public final class Xentella_Damage_Handle extends JavaPlugin {
         MMOItems.plugin.getStats().register(new RestoreMaxPercentDurability("XDH_RESTOREPERCENTMAXDURABILITY", Material.IRON_SWORD, "Restore Percent Max Durability", new String[]{"Restore Percent Max Durability","","Use for : Xentella Damage Handler"}));
         MMOItems.plugin.getStats().register(new RestoreMaxDurability("XDH_RESTOREMAXDURABILITY", Material.IRON_SWORD, "Restore Max Durability", new String[]{"Restore Max Durability","","Use for : Xentella Damage Handler"}));
         MMOItems.plugin.getStats().register(new LevelUpgrade("XDH_LEVELUPGRADE", Material.IRON_SWORD, "Level Upgrade", new String[]{"Level Upgrade","","Use for : Xentella Damage Handler"}));
+        MMOItems.plugin.getStats().register(new EtherDriveBonus("XDH_ETHER_DRIVE_BONUS", Material.IRON_SWORD, "Ether Drive Bonus", new String[]{"Ether Drive Bonus","","Use for : Xentella Damage Handler"}));
         // Config
         this.getConfig().options().copyDefaults();
         saveDefaultConfig();

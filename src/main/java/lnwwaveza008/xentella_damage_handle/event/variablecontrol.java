@@ -1,7 +1,10 @@
 package lnwwaveza008.xentella_damage_handle.event;
 
 import lnwwaveza008.xentella_damage_handle.Xentella_Damage_Handle;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
