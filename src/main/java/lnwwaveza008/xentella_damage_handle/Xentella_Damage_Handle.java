@@ -105,6 +105,10 @@ public final class Xentella_Damage_Handle extends JavaPlugin {
         board.registerNewTeam("DENDROSHIELD").setColor(ChatColor.DARK_GREEN);
         // TimeManager
         timemanager = new TimeManager(this);
+        // Placeholders
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new Placeholders(this).register();
+        }
     }
 
     @Override
