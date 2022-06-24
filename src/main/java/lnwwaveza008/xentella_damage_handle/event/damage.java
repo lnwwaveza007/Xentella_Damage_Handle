@@ -924,7 +924,7 @@ public class damage implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void onDamaged(EntityDamageByEntityEvent e){
         // Check Npc
-        if (e.getDamager() instanceof Player || e.getEntity() instanceof Player) {
+        if (e.getEntity() instanceof Player) {
             Player victim = (Player) e.getEntity();
             if (victim.hasMetadata("NPC")) {
                 return;
