@@ -109,6 +109,10 @@ public final class Xentella_Damage_Handle extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new Placeholders(this).register();
         }
+        // Reload Another plugin
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm reload");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mi reload all");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mmocore reload");
     }
 
     @Override
